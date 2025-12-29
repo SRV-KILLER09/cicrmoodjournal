@@ -1,0 +1,112 @@
+body.dark-theme {
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.dark-theme .login-container {
+    background-color: #1a1a1a;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 40px;
+    width: 380px;
+}
+
+.dark-theme .logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.dark-theme .logo .fas {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+
+.dark-theme .logo span,
+.dark-theme h2,
+.dark-theme label,
+.dark-theme .subtitle,
+.dark-theme .or-divider,
+.dark-theme .signup-link,
+.dark-theme .google-btn {
+    color: #fff;
+}
+
+.dark-theme h2 {
+    font-size: 28px;
+    margin: 0;
+}
+
+.dark-theme .subtitle {
+    font-size: 14px;
+    color: #a0a0a0;
+    margin-bottom: 30px;
+}
+
+.dark-theme label {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.dark-theme input[type="email"],
+.dark-theme input[type="password"],
+.dark-theme input[type="tel"],
+.dark-theme input[type="text"] {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 5px;
+    padding: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dark-theme .login-btn {
+    background-color: #e50914;
+    border: none;
+    border-radius: 5px;
+    padding: 12px;
+    width: 100%;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.dark-theme .or-divider {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 12px;
+}
+
+.dark-theme .google-btn {
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 12px;
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dark-theme .google-btn .fab {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.dark-theme .signup-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.dark-theme .signup-link a {
+    color: #e50914;
+    text-decoration: none;
+}

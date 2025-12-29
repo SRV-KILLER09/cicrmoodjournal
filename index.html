@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CICR Mood Journal | Login</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <h1 class="app-title">CICR MOOD JOURNAL</h1>
+
+  <div class="login-card">
+    <h2>Welcome Back</h2>
+
+    <form id="login-form">
+      <div class="input-group">
+        <input type="email" id="email" placeholder="Email Address" required>
+      </div>
+
+      <div class="input-group password-group">
+        <input type="password" id="password" placeholder="Password" required>
+        <span class="toggle" onclick="togglePassword()">Show</span>
+      </div>
+
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+
+    <p class="signup-text">
+      Don’t have an account? <a href="signup.html">Sign Up</a>
+    </p>
+  </div>
+
+  <div class="footer-time" id="time"></div>
+
+  <!-- LOGIN TOAST -->
+  <div id="login-toast" class="toast">
+    <span id="toast-text"></span>
+    <span class="close-toast" onclick="closeToast()">✕</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

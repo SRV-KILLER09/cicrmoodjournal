@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CICR – Mood Journal</title>
+
+<link rel="stylesheet" href="style.css">
+<script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+</head>
+
+<body class="dashboard-page">
+
+<nav class="navbar">
+  <h1>C<span>I</span>CR</h1>
+
+  <div class="nav-actions">
+
+    <button id="reminderBtn">⏰ Reminder</button>
+
+    <div id="reminderPopup">
+      <h3>Mood Reminder</h3>
+      <input type="time" id="reminderTime">
+      <div class="popup-buttons">
+        <button onclick="setReminder()">Set</button>
+        <button onclick="closeReminder()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="profile-wrapper">
+      <div id="profileIcon" class="profile-icon">U</div>
+      <div id="profileDropdown" class="profile-dropdown">
+        <button onclick="openProfileModal()">View Profile</button>
+        <button onclick="changePrivacyPin()">Privacy PIN</button>
+        <button onclick="logout()">Logout</button>
+      </div>
+      <input type="file" id="uploadProfile" accept="image/*" hidden>
+    </div>
+  </div>
+</nav>
+
+<!-- PROFILE MODAL -->
+<div id="profileModal">
+  <h2>Profile</h2>
+  <img id="profilePicPreview" class="profile-preview">
+  <input id="profileUsername" placeholder="Username">
+  <input id="profilePin" type="password" placeholder="Privacy PIN">
+  <div class="popup-buttons">
+    <button onclick="saveProfile()">Save</button>
+    <button onclick="closeProfileModal()">Close</button>
+  </div>
+  <button onclick="uploadProfile.click()">Change Picture</button>
+</div>
+
+<header class="welcome-box">
+  Welcome  <span id="username-placeholder"> User</span> to <span class="brand">CICR Mood Journal</span>
+  <div class="date-time">
+    <span id="date"></span> • <span id="time"></span>
+  </div>
+</header>
+
+<main class="dashboard-grid">
+
+  <!-- CAMERA -->
+  <div class="card">
+    <h3>Mood Detection</h3>
+    <video id="webcam" autoplay muted></video>
+    <p id="moodResult">Detecting mood...</p>
+  </div>
+
+  <!-- MOOD CALENDAR -->
+  <div class="card mood-calendar-card">
+    <h3>Mood Calendar</h3>
+
+    <div class="calendar-header">
+      <button id="prevMonth">‹</button>
+      <span id="calendarMonth"></span>
+      <button id="nextMonth">›</button>
+    </div>
+
+    <div class="calendar-grid" id="calendarGrid"></div>
+
+    <div class="mood-details" id="moodDetails">
+      <p class="muted">Click a date to see details</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>Made with ❤️ by Vardaan</footer>
+
+<script>
+/* ================= PROFILE ================= */
+const profileIcon = document.getElementById("profileIcon");
+const profileDropdown = document.getElementById("profileDropdown");
+const uploadProfile = document.getElementById("uploadProfile");
+const profileModal = document.getElementById("profileModal");
+const profilePicPreview = document.getElementById("profilePicPreview");
+const profileUsernameInput = document.getElementById("profileUsername");
+const profilePinInput = document.getElementById("profilePin");
+const usernamePlaceholder = document.getElementById("username-placeholder");
+
+let profile = JSON.parse(localStorage.getItem("profile")) || {
+  username: localStorage.getItem("username") || "User",
+  pic: "",
+  pin: ""
+};
+
+function updateProfileUI(){
+  if(profile.pic){
+    profileIcon.style.backgroundImage=`url(${profile.pic})`;
+    profileIcon.textContent="";
+    profilePicPreview.src=profile.pic;
+  } else profileIcon.textContent=profile.username[0].toUpperCase();
+  profileUsernameInput.value=profile.username;
+  profilePinInput.value=profile.pin;
+  usernamePlaceholder.textContent=profile.username;
+}
+updateProfileUI();
+
+profileIcon.onclick=()=>profileDropdown.classList.toggle("show");
+window.onclick=e=>{
+  if(!e.target.closest(".profile-wrapper")) profileDropdown.classList.remove("show");
+  if(!e.target.closest("#reminderPopup")) closeReminder();
+};
+
+uploadProfile.onchange=e=>{
+  const f=e.target.files[0];
+  const r=new FileReader();
+  r.onload=ev=>{ profile.pic=ev.target.result; saveProfile(); };
+  r.readAsDataURL(f);
+};
+
+function openProfileModal(){ profileModal.style.display="block"; }
+function closeProfileModal(){ profileModal.style.display="none"; }
+function saveProfile(){
+  profile.username=profileUsernameInput.value;
+  profile.pin=profilePinInput.value;
+  localStorage.setItem("profile",JSON.stringify(profile));
+  updateProfileUI();
+  closeProfileModal();
+}
+function changePrivacyPin(){ alert("Feature locked 🔐"); }
+function logout(){ localStorage.clear(); location.href="index.html"; }
+
+/* ================= DATE TIME ================= */
+setInterval(()=>{
+  const d=new Date();
+  date.textContent=d.toLocaleDateString();
+  time.textContent=d.toLocaleTimeString();
+},1000);
+
+/* ================= REMINDER ================= */
+const reminderPopup=document.getElementById("reminderPopup");
+reminderBtn.onclick=e=>{ e.stopPropagation(); reminderPopup.classList.toggle("show"); };
+function closeReminder(){ reminderPopup.classList.remove("show"); }
+function setReminder(){
+  const t=reminderTime.value;
+  if(!t) return alert("Select time");
+  Notification.requestPermission();
+  closeReminder();
+}
+
+/* ================= MOOD + LOGGING ================= */
+const video=document.getElementById("webcam");
+const moodResult=document.getElementById("moodResult");
+let moodLogs=JSON.parse(localStorage.getItem("moodLogs"))||{};
+
+async function startCam(){
+  video.srcObject=await navigator.mediaDevices.getUserMedia({video:true});
+}
+
+async function loadModels(){
+  const url="https://justadudewhohacks.github.io/face-api.js/models/";
+  await faceapi.nets.tinyFaceDetector.loadFromUri(url);
+  await faceapi.nets.faceExpressionNet.loadFromUri(url);
+}
+
+async function detectMood(){
+  const d=await faceapi.detectSingleFace(video,new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
+  if(!d) return;
+  let mood="😐 Neutral";
+  if(d.expressions.happy>0.5) mood="😊 Happy";
+  if(d.expressions.sad>0.5) mood="😔 Sad";
+  if(d.expressions.angry>0.5) mood="😡 Angry";
+  moodResult.textContent=mood;
+
+  const today=new Date().toISOString().split("T")[0];
+  moodLogs[today]={ mood, time:new Date().toLocaleTimeString() };
+  localStorage.setItem("moodLogs",JSON.stringify(moodLogs));
+  renderCalendar();
+}
+
+(async()=>{
+  await loadModels();
+  await startCam();
+  setInterval(detectMood,5000);
+})();
+
+/* ================= CALENDAR ================= */
+let current=new Date();
+const grid=document.getElementById("calendarGrid");
+const monthTitle=document.getElementById("calendarMonth");
+const details=document.getElementById("moodDetails");
+
+function renderCalendar(){
+  grid.innerHTML="";
+  const y=current.getFullYear();
+  const m=current.getMonth();
+  monthTitle.textContent=current.toLocaleString("default",{month:"long",year:"numeric"});
+
+  const days=new Date(y,m+1,0).getDate();
+  for(let d=1;d<=days;d++){
+    const dateStr=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const cell=document.createElement("div");
+    cell.className="calendar-day";
+    cell.textContent=d;
+    if(moodLogs[dateStr]) cell.classList.add("has-mood");
+    cell.onclick=()=>{
+      const log=moodLogs[dateStr];
+      details.innerHTML=log
+        ? `<h4>${dateStr}</h4><p>${log.mood}</p><small>${log.time}</small>`
+        : `<p class="muted">No mood logged</p>`;
+    };
+    grid.appendChild(cell);
+  }
+}
+
+prevMonth.onclick=()=>{ current.setMonth(current.getMonth()-1); renderCalendar(); };
+nextMonth.onclick=()=>{ current.setMonth(current.getMonth()+1); renderCalendar(); };
+renderCalendar();
+</script>
+</body>
+</html>

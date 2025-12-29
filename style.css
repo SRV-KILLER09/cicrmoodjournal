@@ -1,0 +1,329 @@
+/* ---------------------------- */
+/* GLOBAL STYLES (login/signup + dashboard) */
+/* ---------------------------- */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", Arial, sans-serif; }
+body { min-height: 100vh; background: radial-gradient(circle at top, #1a0000, #000); color: white; }
+
+/* LOGIN/SIGNUP TITLE */
+.app-title { font-size: 36px; margin: 40px 0; color: #ffffff; letter-spacing: 4px; text-align: center; text-shadow: 0 0 5px #ff0000,0 0 10px #ff0000,0 0 15px #ff3b3b,0 0 20px #ff3b3b; }
+
+/* LOGIN CARD */
+.login-card { width: 100%; max-width: 360px; margin: auto; background: rgba(0,0,0,0.75); padding: 30px 25px; border-radius: 16px; box-shadow: 0 0 30px rgba(255,0,0,0.3); }
+.login-card h2 { text-align: center; margin-bottom: 25px; color: #ff3b3b; }
+.input-group { margin-bottom: 18px; }
+.input-group input { width: 100%; padding: 14px; border-radius: 10px; border: none; background: #111; color: #fff; font-size: 15px; }
+.input-group input::placeholder { color: #777; }
+.password-group { position: relative; }
+.toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #ff3b3b; font-size: 13px; cursor: pointer; }
+.login-btn { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #ff3b3b; background: transparent; color: #ff3b3b; font-size: 16px; cursor: pointer; }
+.login-btn:hover { background: #ff3b3b; color: black; }
+.signup-text { margin-top: 20px; text-align: center; font-size: 14px; }
+.signup-text a { color: #a855f7; text-decoration: none; }
+
+/* LIVE DATE/TIME BOX */
+.footer-time { position: fixed; bottom: 20px; right: 20px; background: #1a0000; padding: 12px 18px; border-radius: 20px; color: #ff3b3b; font-size: 14px; font-weight: 600; text-align: center; line-height: 1.4; min-width: 180px; z-index: 1000; box-shadow: 0 0 10px #ff0000aa,0 0 20px #ff00007f,0 0 30px #ff000040; white-space: pre-line; }
+
+/* TOAST NOTIFICATION */
+.toast { position: fixed; bottom: 20px; right: 20px; background: #1a0000; border: 2px solid #ff3b3b; color: #fff; padding: 14px 20px; border-radius: 14px; box-shadow: 0 0 10px #ff3b3b88,0 0 25px #ff3b3b55; font-size: 16px; display: none; align-items: center; justify-content: space-between; min-width: 200px; max-width: 280px; z-index: 1000; animation: fadeIn 0.5s ease-in-out; }
+.toast .close-toast { cursor: pointer; font-weight: bold; margin-left: 12px; color: #ff3b3b; transition: 0.2s; }
+.toast .close-toast:hover { color: white; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+/* ---------------------------- */
+/* DASHBOARD NAVBAR */
+/* ---------------------------- */
+.dashboard-page .navbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; flex-wrap: wrap; }
+.dashboard-page .navbar h1 { font-size: clamp(24px, 3vw, 36px); }
+.dashboard-page .navbar span { color: #ff3b3b; }
+.dashboard-page .nav-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.dashboard-page .nav-actions button { background: transparent; border: 1px solid #ff3b3b; color: #ff3b3b; padding: 6px 14px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+.dashboard-page .nav-actions button:hover { background: #ff3b3b; color: black; }
+.dashboard-page .logout-btn { border-color: #ff3b3b; color: #ff3b3b; box-shadow: 0 0 8px #ff3b3b88,0 0 20px #ff3b3b44; }
+.dashboard-page .logout-btn:hover { background: #ff3b3b; color: black; box-shadow: 0 0 15px #ff3b3baa,0 0 40px #ff3b3b55,0 0 60px #ff3b3b33; }
+
+/* ---------------------------- */
+/* WELCOME BOX */
+.dashboard-page .welcome-box { max-width: 1000px; margin: 30px auto 40px; padding: 18px 28px; border-radius: 20px; background: #1a0000; box-shadow: 0 0 12px #ff0000aa,0 0 30px #ff00007f,0 0 60px #ff000040; text-align: center; color: white; font-weight: 700; font-size: 22px; letter-spacing: 0.2px; display: flex; flex-direction: row; align-items: center; justify-content: center; position: relative; }
+.dashboard-page .brand, .dashboard-page #username-placeholder { color: #ff3b3b; text-shadow: 0 0 12px rgba(255, 59, 59, 0.7); }
+.dashboard-page .date-time { margin-top: 8px; font-weight: 500; font-size: 16px; color: #ff6b6bcc; letter-spacing: 0.6px; }
+
+/* ---------------------------- */
+/* DASHBOARD GRID */
+.dashboard-page .dashboard-grid { max-width: 1200px; margin: auto; padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+
+/* ---------------------------- */
+/* CARD WIDGET STYLES */
+.dashboard-page .card { background: rgba(0,0,0,0.7); border-radius: 24px; padding: 24px; box-shadow: 0 0 30px rgba(255,0,0,0.2); display: flex; flex-direction: column; align-items: center; }
+.dashboard-page .card h3 { margin-bottom: 15px; font-size: 20px; text-align: center; color: #ff3b3b; text-shadow: 0 0 10px #ff0000; }
+
+/* CAMERA WIDGET */
+.card video {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 20px #ff3b3b88,0 0 40px #ff00007f;
+    filter: brightness(1.2) contrast(1.2);
+    background: #000;
+}
+
+/* ---------------------------- */
+/* FOOTER */
+.dashboard-page footer { text-align: center; margin: 30px 0; color: #aaa; }
+
+/* ---------------------------- */
+/* PROFILE ICON & DROPDOWN */
+.profile-wrapper { position: relative; display: flex; align-items: center; cursor: pointer; }
+.profile-icon {
+  width: 42px; height: 42px; border-radius: 50%; border: 2px solid #ff3b3b;
+  display: flex; align-items: center; justify-content: center;
+  background-size: cover; background-position: center;
+  font-weight: bold; color: #ff3b3b; transition: 0.2s; cursor: pointer;
+}
+.profile-icon:hover { transform: scale(1.1); box-shadow: 0 0 12px #ff3b3b88, 0 0 24px #ff3b3b55; }
+.profile-dropdown {
+  display: none; position: absolute; top: 50px; right: 0;
+  background: #1a0000; border: 1px solid #ff3b3b; border-radius: 12px;
+  min-width: 160px; box-shadow: 0 0 10px #ff3b3b88; flex-direction: column; z-index: 1000;
+}
+.profile-dropdown.show { display: flex; }
+.profile-dropdown button {
+  background: transparent; border:none; color:white; padding:10px 14px; text-align:left; cursor:pointer; transition:0.2s;
+}
+.profile-dropdown button:hover { background:#ff3b3b; color:black; }
+
+/* ---------------------------- */
+/* PROFILE MODAL */
+#profileModal {
+  display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  background:#1a0000; padding:20px; border-radius:20px; box-shadow:0 0 30px rgba(255,0,0,0.5);
+  z-index:2000; text-align:center; min-width:280px;
+}
+.profile-preview { width: 80px; height: 80px; border-radius:50%; margin-bottom:12px; object-fit: cover; border: 2px solid #ff3b3b; }
+#profileModal input { width:100%; padding:10px; margin-bottom:12px; border-radius:12px; border:none; background:#111; color:white; }
+#profileModal .popup-buttons { display:flex; gap:10px; justify-content:center; margin-top:10px; }
+#profileModal button { border:2px solid #ff3b3b; padding:8px 12px; border-radius:12px; background:transparent; color:#ff3b3b; cursor:pointer; transition:0.2s; }
+#profileModal button:hover { background:#ff3b3b; color:black; }
+
+/* ---------------------------- */
+/* REMINDER POPUP */
+#reminderPopup {
+  display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  background:#1a0000; padding:20px; border-radius:20px; box-shadow:0 0 30px rgba(255,0,0,0.5);
+  z-index:2000; text-align:center; min-width:260px;
+}
+#reminderPopup input { width:100%; padding:10px; margin:12px 0; border-radius:12px; border:none; background:#111; color:white; }
+#reminderPopup .popup-buttons { display:flex; gap:10px; justify-content:center; }
+#reminderPopup button { border:2px solid #ff3b3b; padding:8px 12px; border-radius:12px; background:transparent; color:#ff3b3b; cursor:pointer; transition:0.2s; }
+#reminderPopup button:hover { background:#ff3b3b; color:black; }
+
+/* ---------------------------- */
+/* RESPONSIVE */
+@media (max-width:900px) { .dashboard-page .dashboard-grid { grid-template-columns:1fr; } }
+@media (max-width:480px) {
+  .welcome-box { font-size:18px; padding:16px 20px; }
+  .date-time { font-size:14px; }
+  .app-title { font-size:24px; }
+  .camera-widget video { max-width:100%; }
+}
+
+/* ================= REMINDER DROPDOWN FIX ================= */
+
+/* Override old modal behavior ONLY on dashboard */
+.dashboard-page #reminderPopup {
+  position: absolute;
+  top: 48px;
+  right: 0;
+
+  transform: none;
+  min-width: 240px;
+
+  display: none;
+  background: #1a0000;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  border: 1px solid #ff3b3b;
+
+  z-index: 3000;
+}
+
+/* Show dropdown */
+.dashboard-page #reminderPopup.show {
+  display: block;
+}
+
+/* Dropdown title */
+.dashboard-page #reminderPopup h3 {
+  margin-bottom: 10px;
+  text-align: center;
+  color: #ff3b3b;
+}
+
+/* Time input */
+.dashboard-page #reminderPopup input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: #111;
+  border: none;
+  color: white;
+}
+
+/* Buttons layout */
+.dashboard-page #reminderPopup .popup-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.dashboard-page #reminderPopup button {
+  flex: 1;
+}
+
+/* ============================= */
+/* MOOD CALENDAR – AESTHETIC UI */
+/* ============================= */
+
+.mood-calendar-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Calendar header */
+.calendar-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.calendar-header span {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ff6b6b;
+  letter-spacing: 1px;
+}
+
+.calendar-header button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 18px;
+  padding: 0;
+  line-height: 1;
+}
+
+/* Calendar grid */
+.calendar-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* Calendar day cell */
+.calendar-day {
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(145deg, #0e0e0e, #050000);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255, 59, 59, 0.15);
+}
+
+.calendar-day:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 59, 59, 0.6);
+}
+
+/* Mood logged indicator */
+.calendar-day.has-mood {
+  background: radial-gradient(circle at top, #ff3b3b, #7a0000);
+  color: black;
+  box-shadow: 0 0 18px rgba(255, 59, 59, 0.8);
+}
+
+/* Small glow dot */
+.calendar-day.has-mood::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  width: 6px;
+  height: 6px;
+  background: black;
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+/* Mood details panel */
+.mood-details {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #120000, #060000);
+  box-shadow: inset 0 0 12px rgba(255, 0, 0, 0.25);
+  text-align: center;
+  animation: fadeUp 0.3s ease;
+}
+
+.mood-details h4 {
+  color: #ff3b3b;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.mood-details p {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.mood-details small {
+  font-size: 12px;
+  color: #ff9a9a;
+}
+
+.muted {
+  color: #888;
+  font-size: 13px;
+}
+
+/* Animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================= */
+/* RESPONSIVE CALENDAR TWEAKS */
+/* ============================= */
+
+@media (max-width: 600px) {
+  .calendar-header span {
+    font-size: 16px;
+  }
+
+  .calendar-grid {
+    gap: 6px;
+  }
+
+  .calendar-day {
+    border-radius: 10px;
+    font-size: 14px;
+  }
+}
+
