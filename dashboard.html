@@ -6,11 +6,14 @@
 <title>CICR – Mood Journal</title>
 
 <link rel="stylesheet" href="style.css">
+
+<!-- Face API -->
 <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
 </head>
 
 <body class="dashboard-page">
 
+<!-- ================= NAVBAR ================= -->
 <nav class="navbar">
   <h1>C<span>I</span>CR</h1>
 
@@ -39,7 +42,7 @@
   </div>
 </nav>
 
-<!-- PROFILE MODAL -->
+<!-- ================= PROFILE MODAL ================= -->
 <div id="profileModal">
   <h2>Profile</h2>
   <img id="profilePicPreview" class="profile-preview">
@@ -52,19 +55,27 @@
   <button onclick="uploadProfile.click()">Change Picture</button>
 </div>
 
+<!-- ================= WELCOME ================= -->
 <header class="welcome-box">
-  Welcome  <span id="username-placeholder"> User</span> to <span class="brand">CICR Mood Journal</span>
+  Welcome <span id="username-placeholder">User</span> to
+  <span class="brand">CICR Mood Journal</span>
   <div class="date-time">
     <span id="date"></span> • <span id="time"></span>
   </div>
 </header>
 
+<!-- ================= DASHBOARD ================= -->
 <main class="dashboard-grid">
 
-  <!-- CAMERA -->
+  <!-- MOOD DETECTION -->
   <div class="card">
     <h3>Mood Detection</h3>
-    <video id="webcam" autoplay muted></video>
+
+    <div class="camera-widget">
+      <video id="webcam" autoplay muted playsinline></video>
+      <canvas id="overlay"></canvas>
+    </div>
+
     <p id="moodResult">Detecting mood...</p>
   </div>
 
@@ -89,6 +100,7 @@
 
 <footer>Made with ❤️ by Vardaan</footer>
 
+<!-- ================= SCRIPT ================= -->
 <script>
 /* ================= PROFILE ================= */
 const profileIcon = document.getElementById("profileIcon");
@@ -108,35 +120,41 @@ let profile = JSON.parse(localStorage.getItem("profile")) || {
 
 function updateProfileUI(){
   if(profile.pic){
-    profileIcon.style.backgroundImage=`url(${profile.pic})`;
-    profileIcon.textContent="";
-    profilePicPreview.src=profile.pic;
-  } else profileIcon.textContent=profile.username[0].toUpperCase();
-  profileUsernameInput.value=profile.username;
-  profilePinInput.value=profile.pin;
-  usernamePlaceholder.textContent=profile.username;
+    profileIcon.style.backgroundImage = `url(${profile.pic})`;
+    profileIcon.textContent = "";
+    profilePicPreview.src = profile.pic;
+  } else {
+    profileIcon.textContent = profile.username[0].toUpperCase();
+  }
+  profileUsernameInput.value = profile.username;
+  profilePinInput.value = profile.pin;
+  usernamePlaceholder.textContent = profile.username;
 }
 updateProfileUI();
 
-profileIcon.onclick=()=>profileDropdown.classList.toggle("show");
-window.onclick=e=>{
+profileIcon.onclick = () => profileDropdown.classList.toggle("show");
+
+window.onclick = e => {
   if(!e.target.closest(".profile-wrapper")) profileDropdown.classList.remove("show");
   if(!e.target.closest("#reminderPopup")) closeReminder();
 };
 
-uploadProfile.onchange=e=>{
-  const f=e.target.files[0];
-  const r=new FileReader();
-  r.onload=ev=>{ profile.pic=ev.target.result; saveProfile(); };
-  r.readAsDataURL(f);
+uploadProfile.onchange = e => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = ev => {
+    profile.pic = ev.target.result;
+    saveProfile();
+  };
+  reader.readAsDataURL(file);
 };
 
 function openProfileModal(){ profileModal.style.display="block"; }
 function closeProfileModal(){ profileModal.style.display="none"; }
 function saveProfile(){
-  profile.username=profileUsernameInput.value;
-  profile.pin=profilePinInput.value;
-  localStorage.setItem("profile",JSON.stringify(profile));
+  profile.username = profileUsernameInput.value;
+  profile.pin = profilePinInput.value;
+  localStorage.setItem("profile", JSON.stringify(profile));
   updateProfileUI();
   closeProfileModal();
 }
@@ -145,63 +163,93 @@ function logout(){ localStorage.clear(); location.href="index.html"; }
 
 /* ================= DATE TIME ================= */
 setInterval(()=>{
-  const d=new Date();
-  date.textContent=d.toLocaleDateString();
-  time.textContent=d.toLocaleTimeString();
+  const d = new Date();
+  date.textContent = d.toLocaleDateString(undefined,{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+  time.textContent = d.toLocaleTimeString();
 },1000);
 
 /* ================= REMINDER ================= */
-const reminderPopup=document.getElementById("reminderPopup");
-reminderBtn.onclick=e=>{ e.stopPropagation(); reminderPopup.classList.toggle("show"); };
+const reminderPopup = document.getElementById("reminderPopup");
+const reminderBtn = document.getElementById("reminderBtn");
+
+reminderBtn.onclick = e => {
+  e.stopPropagation();
+  reminderPopup.classList.toggle("show");
+  reminderBtn.classList.remove("bell-animate");
+  void reminderBtn.offsetWidth;
+  reminderBtn.classList.add("bell-animate");
+};
+
 function closeReminder(){ reminderPopup.classList.remove("show"); }
 function setReminder(){
-  const t=reminderTime.value;
-  if(!t) return alert("Select time");
+  if(!reminderTime.value) return alert("Select time");
   Notification.requestPermission();
   closeReminder();
 }
 
-/* ================= MOOD + LOGGING ================= */
-const video=document.getElementById("webcam");
-const moodResult=document.getElementById("moodResult");
-let moodLogs=JSON.parse(localStorage.getItem("moodLogs"))||{};
+/* ================= MOOD DETECTION ================= */
+const video = document.getElementById("webcam");
+const canvas = document.getElementById("overlay");
+const moodResult = document.getElementById("moodResult");
+const ctx = canvas.getContext("2d");
 
-async function startCam(){
-  video.srcObject=await navigator.mediaDevices.getUserMedia({video:true});
+let moodLogs = JSON.parse(localStorage.getItem("moodLogs")) || {};
+
+async function startCamera(){
+  const stream = await navigator.mediaDevices.getUserMedia({ video:true });
+  video.srcObject = stream;
 }
 
 async function loadModels(){
-  const url="https://justadudewhohacks.github.io/face-api.js/models/";
+  const url = "https://justadudewhohacks.github.io/face-api.js/models/";
   await faceapi.nets.tinyFaceDetector.loadFromUri(url);
   await faceapi.nets.faceExpressionNet.loadFromUri(url);
 }
 
-async function detectMood(){
-  const d=await faceapi.detectSingleFace(video,new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
-  if(!d) return;
-  let mood="😐 Neutral";
-  if(d.expressions.happy>0.5) mood="😊 Happy";
-  if(d.expressions.sad>0.5) mood="😔 Sad";
-  if(d.expressions.angry>0.5) mood="😡 Angry";
-  moodResult.textContent=mood;
+video.addEventListener("play", ()=>{
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+});
 
-  const today=new Date().toISOString().split("T")[0];
-  moodLogs[today]={ mood, time:new Date().toLocaleTimeString() };
-  localStorage.setItem("moodLogs",JSON.stringify(moodLogs));
+async function detectMood(){
+  const detection = await faceapi
+    .detectSingleFace(video,new faceapi.TinyFaceDetectorOptions())
+    .withFaceExpressions();
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  if(!detection){
+    moodResult.textContent = "No face detected";
+    return;
+  }
+
+  const exp = detection.expressions;
+  let mood = "😐 Neutral";
+
+  if(exp.happy > 0.5) mood = "😊 Happy";
+  else if(exp.sad > 0.5) mood = "😔 Sad";
+  else if(exp.angry > 0.5) mood = "😡 Angry";
+  else if(exp.surprised > 0.5) mood = "😲 Surprised";
+
+  moodResult.textContent = mood;
+
+  const today = new Date().toISOString().split("T")[0];
+  moodLogs[today] = { mood, time:new Date().toLocaleTimeString() };
+  localStorage.setItem("moodLogs", JSON.stringify(moodLogs));
   renderCalendar();
 }
 
 (async()=>{
   await loadModels();
-  await startCam();
-  setInterval(detectMood,5000);
+  await startCamera();
+  setInterval(detectMood, 3000);
 })();
 
 /* ================= CALENDAR ================= */
-let current=new Date();
-const grid=document.getElementById("calendarGrid");
-const monthTitle=document.getElementById("calendarMonth");
-const details=document.getElementById("moodDetails");
+let current = new Date();
+const grid = document.getElementById("calendarGrid");
+const monthTitle = document.getElementById("calendarMonth");
+const details = document.getElementById("moodDetails");
 
 function renderCalendar(){
   grid.innerHTML="";
@@ -230,5 +278,6 @@ prevMonth.onclick=()=>{ current.setMonth(current.getMonth()-1); renderCalendar()
 nextMonth.onclick=()=>{ current.setMonth(current.getMonth()+1); renderCalendar(); };
 renderCalendar();
 </script>
+
 </body>
 </html>
