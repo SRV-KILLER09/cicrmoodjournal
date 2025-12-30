@@ -541,5 +541,93 @@ body { min-height: 100vh; background: radial-gradient(circle at top, #1a0000, #0
   filter: drop-shadow(0 0 8px #ff3b3b);
 }
 
+/* ================================================= */
+/* FINAL RESPONSIVE REMINDER POPUP – SAFE OVERRIDES */
+/* ================================================= */
+
+/* Ensure parent positioning */
+.nav-actions {
+  position: relative;
+}
+
+/* Desktop default (unchanged behavior) */
+#reminderPopup {
+  max-width: 92vw;                /* prevent overflow */
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+/* Improve button touch feel */
+#reminderPopup button {
+  min-height: 42px;
+  font-weight: 600;
+}
+
+/* Input touch optimization */
+#reminderPopup input {
+  min-height: 42px;
+  font-size: 15px;
+}
+
+/* ============================= */
+/* ANDROID / MOBILE FIX */
+/* ============================= */
+
+@media (max-width: 640px) {
+
+  /* Center popup on small screens */
+  #reminderPopup {
+    position: fixed;
+    left: 50%;
+    right: auto;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    width: 90vw;
+    max-width: 320px;
+    z-index: 10000;
+  }
+
+  /* Show state */
+  #reminderPopup.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+
+  /* Remove arrow on mobile */
+  #reminderPopup::before {
+    display: none;
+  }
+
+  /* Buttons more tappable */
+  .popup-buttons {
+    gap: 12px;
+  }
+
+  .popup-buttons button {
+    padding: 10px 0;
+    font-size: 15px;
+  }
+}
+
+/* ============================= */
+/* MICRO-INTERACTIONS */
+/* ============================= */
+
+/* Subtle press effect */
+#reminderPopup button:active {
+  transform: scale(0.97);
+}
+
+/* Focus glow for accessibility */
+#reminderPopup input:focus {
+  box-shadow: 0 0 0 2px rgba(255, 59, 59, 0.5);
+}
+
+/* Smooth hardware-accelerated animation */
+#reminderPopup {
+  will-change: transform, opacity;
+}
+
+
 
 
