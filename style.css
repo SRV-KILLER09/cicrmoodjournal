@@ -629,5 +629,149 @@ body { min-height: 100vh; background: radial-gradient(circle at top, #1a0000, #0
 }
 
 
+/* ================================================= */
+/* FINAL REMINDER RESPONSIVE FIX (DESKTOP + MOBILE) */
+/* ================================================= */
+
+/* Ensure navbar allows popup */
+.nav-actions {
+  position: relative;
+  overflow: visible;
+}
+
+/* ============================= */
+/* DESKTOP (DEFAULT) */
+/* ============================= */
+
+#reminderPopup {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+
+  width: 260px;
+  max-width: 90vw;
+
+  background: linear-gradient(145deg, #120000, #050000);
+  border-radius: 16px;
+  border: 1px solid #ff3b3b;
+
+  padding: 14px;
+
+  box-shadow:
+    0 0 15px rgba(255, 59, 59, 0.6),
+    0 0 40px rgba(255, 0, 0, 0.3);
+
+  display: none;
+  z-index: 9999;
+
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  transition: all 0.25s ease;
+}
+
+/* Show state */
+#reminderPopup.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Arrow (desktop only) */
+#reminderPopup::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: 24px;
+  width: 14px;
+  height: 14px;
+  background: #120000;
+  border-left: 1px solid #ff3b3b;
+  border-top: 1px solid #ff3b3b;
+  transform: rotate(45deg);
+}
+
+/* ============================= */
+/* MOBILE / ANDROID */
+/* ============================= */
+
+@media (max-width: 640px) {
+
+  #reminderPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+
+    transform: translate(-50%, -50%) scale(0.95);
+    width: 92vw;
+    max-width: 320px;
+
+    padding: 16px;
+    z-index: 10000;
+  }
+
+  #reminderPopup.show {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Remove arrow on mobile */
+  #reminderPopup::before {
+    display: none;
+  }
+}
+
+/* ============================= */
+/* INTERACTION POLISH */
+/* ============================= */
+
+#reminderPopup h3 {
+  text-align: center;
+  font-size: 16px;
+  color: #ff3b3b;
+  margin-bottom: 10px;
+}
+
+#reminderPopup input {
+  width: 100%;
+  min-height: 42px;
+  border-radius: 10px;
+  background: #0b0000;
+  border: none;
+  color: white;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.popup-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.popup-buttons button {
+  flex: 1;
+  min-height: 42px;
+  border-radius: 12px;
+  border: 1px solid #ff3b3b;
+  background: transparent;
+  color: #ff3b3b;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.popup-buttons button:hover {
+  background: rgba(255, 59, 59, 0.2);
+}
+
+.popup-buttons button:active {
+  transform: scale(0.96);
+}
+
+/* Performance */
+#reminderPopup {
+  will-change: transform, opacity;
+}
+
+
 
 
