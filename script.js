@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ===== LOGIN =====
   const loginForm = document.getElementById('login-form');
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
+
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (storedUser) {
         const user = JSON.parse(storedUser);
         if (user.password === password) {
-          localStorage.setItem('username', user.username); // Save username for dashboard
+          localStorage.setItem('username', user.username);
           window.location.href = 'dashboard.html';
         } else {
           alert('Incorrect password!');
@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ===== SIGNUP =====
   const signupForm = document.getElementById('signup-form');
   if (signupForm) {
     signupForm.addEventListener('submit', (e) => {
@@ -42,10 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ===== PASSWORD TOGGLE =====
-  window.togglePassword = function() {
+  window.togglePassword = function () {
     const pass = document.getElementById('password');
     const toggle = document.querySelector('.toggle');
+
     if (pass.type === 'password') {
       pass.type = 'text';
       toggle.textContent = 'Hide';
@@ -53,9 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
       pass.type = 'password';
       toggle.textContent = 'Show';
     }
-  }
+  };
 
-  // ===== LIVE TIME =====
   const timeEl = document.getElementById('time');
   if (timeEl) {
     setInterval(() => {
