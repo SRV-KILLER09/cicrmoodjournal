@@ -6,19 +6,15 @@
 <title>CICR – Mood Journal</title>
 
 <link rel="stylesheet" href="style.css">
-
-<!-- Face API -->
 <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
 </head>
 
 <body class="dashboard-page">
 
-<!-- ================= NAVBAR ================= -->
 <nav class="navbar">
   <h1>C<span>I</span>CR</h1>
 
   <div class="nav-actions">
-
     <button id="reminderBtn">⏰ Reminder</button>
 
     <div id="reminderPopup">
@@ -42,7 +38,6 @@
   </div>
 </nav>
 
-<!-- ================= PROFILE MODAL ================= -->
 <div id="profileModal">
   <h2>Profile</h2>
   <img id="profilePicPreview" class="profile-preview">
@@ -55,7 +50,6 @@
   <button onclick="uploadProfile.click()">Change Picture</button>
 </div>
 
-<!-- ================= WELCOME ================= -->
 <header class="welcome-box">
   Welcome <span id="username-placeholder">User</span> to
   <span class="brand">CICR Mood Journal</span>
@@ -64,45 +58,33 @@
   </div>
 </header>
 
-<!-- ================= DASHBOARD ================= -->
 <main class="dashboard-grid">
-
-  <!-- MOOD DETECTION -->
   <div class="card">
     <h3>Mood Detection</h3>
-
     <div class="camera-widget">
       <video id="webcam" autoplay muted playsinline></video>
       <canvas id="overlay"></canvas>
     </div>
-
     <p id="moodResult">Detecting mood...</p>
   </div>
 
-  <!-- MOOD CALENDAR -->
   <div class="card mood-calendar-card">
     <h3>Mood Calendar</h3>
-
     <div class="calendar-header">
       <button id="prevMonth">‹</button>
       <span id="calendarMonth"></span>
       <button id="nextMonth">›</button>
     </div>
-
     <div class="calendar-grid" id="calendarGrid"></div>
-
     <div class="mood-details" id="moodDetails">
       <p class="muted">Click a date to see details</p>
     </div>
   </div>
-
 </main>
 
 <footer>Made with ❤️ by Vardaan</footer>
 
-<!-- ================= SCRIPT ================= -->
 <script>
-/* ================= PROFILE ================= */
 const profileIcon = document.getElementById("profileIcon");
 const profileDropdown = document.getElementById("profileDropdown");
 const uploadProfile = document.getElementById("uploadProfile");
@@ -161,14 +143,12 @@ function saveProfile(){
 function changePrivacyPin(){ alert("Feature locked 🔐"); }
 function logout(){ localStorage.clear(); location.href="index.html"; }
 
-/* ================= DATE TIME ================= */
 setInterval(()=>{
   const d = new Date();
   date.textContent = d.toLocaleDateString(undefined,{weekday:"long",year:"numeric",month:"long",day:"numeric"});
   time.textContent = d.toLocaleTimeString();
 },1000);
 
-/* ================= REMINDER ================= */
 const reminderPopup = document.getElementById("reminderPopup");
 const reminderBtn = document.getElementById("reminderBtn");
 
@@ -187,7 +167,6 @@ function setReminder(){
   closeReminder();
 }
 
-/* ================= MOOD DETECTION ================= */
 const video = document.getElementById("webcam");
 const canvas = document.getElementById("overlay");
 const moodResult = document.getElementById("moodResult");
@@ -245,7 +224,6 @@ async function detectMood(){
   setInterval(detectMood, 3000);
 })();
 
-/* ================= CALENDAR ================= */
 let current = new Date();
 const grid = document.getElementById("calendarGrid");
 const monthTitle = document.getElementById("calendarMonth");
