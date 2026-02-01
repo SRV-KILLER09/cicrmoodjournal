@@ -67,8 +67,7 @@ It focuses on simplicity, clarity, and emotional comfort.
 
 ## 👥 Team Members
 
-👨‍💻 **Vardaan Saxena**  
-👩‍💻 **Nikita Singh**
+ **Made with ❤️ By** **Vardaan Saxena & Nikita Singh**
 
 ---
 
